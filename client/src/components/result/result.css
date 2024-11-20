@@ -1,0 +1,61 @@
+.result {
+  height: 85vh;
+  width: 80vw;
+  display: flex;
+  flex-direction: column;
+  gap: 11vh;
+}
+
+.result > div > p:first-of-type {
+  line-height: 1;
+  font-size: 2rem;
+}
+
+.result-score {
+  background-color: #ffffff;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  height: 25vh;
+  justify-content: center;
+}
+
+.score-wrapp > p:first-of-type {
+  font-size: 3.5em;
+  margin: 0;
+}
+
+.title-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.score-wrapp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.retry-button {
+  width: 100%;
+  margin-top: 20px;
+}
+
+@media (min-width: 1024px) {
+  .result {
+    display: flex;
+    flex-direction: row;
+
+    max-width: 800px;
+    width: 800px;
+
+    justify-content: space-evenly;
+
+    height: 50vh;
+  }
+
+  .result-score {
+    padding: 20px 100px;
+  }
+}
