@@ -3,11 +3,11 @@ body {
   padding: 0; /* Remove default padding */
   font-family: Arial, sans-serif; /* Set a font */
   font-size: 16px; /* Set base font size */
-  display: flex;
+  /* display: flex; */
   height: 100vh;
   width: 100vw;
-  justify-content: center;
-  align-items: center;
-  color: #333; /* Set text color */
-  background-color: #f4f4f4; /* Set background color */
+  /* justify-content: center; */
+  /* align-items: center; */
+  color: white; /* Set text color */
+  background-color: #313e51; /* Set background color */
 }

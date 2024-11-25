@@ -1,9 +1,10 @@
 .result {
   height: 85vh;
-  width: 80vw;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   gap: 11vh;
+  align-items: center;
 }
 
 .result > div > p:first-of-type {
@@ -12,13 +13,14 @@
 }
 
 .result-score {
-  background-color: #ffffff;
+  background-color: #3b4d66;
   align-items: center;
   display: flex;
   flex-direction: column;
   border-radius: 20px;
   height: 25vh;
   justify-content: center;
+  width: 60vw;
 }
 
 .score-wrapp > p:first-of-type {
@@ -46,9 +48,9 @@
   .result {
     display: flex;
     flex-direction: row;
-
-    max-width: 800px;
-    width: 800px;
+    width: 100%;
+    /* max-width: 800px;
+    width: 800px; */
 
     justify-content: space-evenly;
 
@@ -57,5 +59,6 @@
 
   .result-score {
     padding: 20px 100px;
+    width: 100px;
   }
 }

@@ -7,10 +7,8 @@ import Result from "../result/Result";
 import { useSelector, useDispatch } from "react-redux";
 import { calculateScore } from "../../redux/result_reducer";
 
-import { setTrace } from "../../redux/question_reducer";
+import { resetTrace, setTrace } from "../../redux/question_reducer";
 import ProgressBar from "../progressbar/ProgressBar";
-import { Navigate } from "react-router-dom";
-import { resetAllAction } from "../../redux/question_reducer";
 
 const Quiz = () => {
   const { quiz } = useData();
@@ -30,17 +28,15 @@ const Quiz = () => {
   if (serverError) return <h3>Isloading</h3>;
 
   useEffect(() => {
-    // Check if there's a saved trace value in localStorage
-    const savedTrace = localStorage.getItem("currentQuestionIndex");
+    const storageKey = `currentQuestionIndex_${quiz.title}`;
+    dispatch(resetTrace());
+    const savedTrace = sessionStorage.getItem(storageKey);
     if (savedTrace !== null) {
-      // If found, dispatch an action to set it in Redux
-      dispatch(setTrace(parseInt(savedTrace, 10))); // Convert to number and set in Redux
+      dispatch(setTrace(parseInt(savedTrace, 10)));
     }
-  }, [dispatch]);
+  }, [dispatch, quiz.title]);
 
   const sumbitAnswer = () => {
-    console.log(userAnswer);
-
     try {
       if (userAnswer.length !== 0) {
         dispatch(MoveNextQestion());
@@ -66,8 +62,12 @@ const Quiz = () => {
     }
   };
 
+  const restartQuiz = () => {
+    sessionStorage.removeItem(`currentQuestionIndex_${quiz.title}`);
+    window.location.reload();
+  };
+
   const styling = (index) => {
-    console.log(index, userAnswer, question.answer);
     if (hasSubmitted) {
       if (index === question.answer) {
         return "correct";
@@ -88,54 +88,55 @@ const Quiz = () => {
     }
 
     if (trace !== null) {
-      // Every time trace updates, save it to localStorage
-      localStorage.setItem("currentQuestionIndex", trace.toString());
+      const storageKey = `currentQuestionIndex_${quiz.title}`;
+      sessionStorage.setItem(storageKey, trace.toString());
     }
-  }, [trace, questions.length]);
+  }, [trace, questions.length, quiz.title]);
 
   return (
     <div className="quiz">
-      {isQuizFinished ? (
-        <Result icon={quiz.icon} title={quiz.title} />
-      ) : (
-        <>
-          <div className="container">
-            <div className="subject_title">
-              <img src={quiz.icon} />
-              <h2>{quiz.title}</h2>
+      <div className="subject_title">
+        <img src={quiz.icon} />
+        <h2>{quiz.title}</h2>
+      </div>
+      <div className="quiz_wrapper">
+        {isQuizFinished ? (
+          <Result icon={quiz.icon} title={quiz.title} />
+        ) : (
+          <>
+            <div className="container">
+              <div>
+                <i>
+                  Question {trace + 1} out of {questions.length}
+                </i>
+              </div>
+
+              <div className="question">
+                <h2>{question && question.question}</h2>
+              </div>
+              <ProgressBar progress={(trace * 100) / questions.length} />
             </div>
 
-            <div>
-              <i>
-                Question {trace + 1} out of {questions.length}
-              </i>
+            <div className="container-answer">
+              <div className={`answers ${hasSubmitted ? "disable" : ""}`}>
+                {question &&
+                  question.options.map((option, i) => (
+                    <div
+                      onClick={() => checkAnswer(i)}
+                      key={i}
+                      className={`answer ${styling(i)}`}
+                    >
+                      {option}
+                    </div>
+                  ))}
+              </div>
+
+              <button onClick={sumbitAnswer}>Submit Answer</button>
+              <button onClick={restartQuiz}>Restart</button>
             </div>
-
-            <div className="question">
-              <h2>{question && question.question}</h2>
-            </div>
-
-            <ProgressBar progress={(trace * 100) / questions.length} />
-          </div>
-
-          <div className="container-answer">
-            <div className={`answers ${hasSubmitted ? "disable" : ""}`}>
-              {question &&
-                question.options.map((option, i) => (
-                  <div
-                    onClick={() => checkAnswer(i)}
-                    key={i}
-                    className={`answer ${styling(i)}`}
-                  >
-                    {option}
-                  </div>
-                ))}
-            </div>
-
-            <button onClick={sumbitAnswer}>Submit Answer</button>
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

@@ -25,6 +25,10 @@ export const questionReducer = createSlice({
       };
     },
 
+    resetTrace: (state) => {
+      state.trace = 0;
+    },
+
     resetAllAction: () => {
       return initialState;
     },
@@ -42,5 +46,6 @@ export const {
   moveNextQestion,
   resetAllAction,
   setTrace,
+  resetTrace,
 } = questionReducer.actions;
 export default questionReducer.reducer;

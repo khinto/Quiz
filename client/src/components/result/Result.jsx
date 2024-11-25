@@ -4,28 +4,23 @@ import { trace } from "../../redux/question_reducer";
 import "./result.css";
 import { resetResultAction } from "../../redux/result_reducer";
 import { resetAllAction } from "../../redux/question_reducer";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const Result = ({ icon, title }) => {
   const { score } = useSelector((state) => state.result);
   const trace = useSelector((state) => state.questions.trace);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const percentage = (score / trace) * 100;
-
-  useEffect(() => {
-    console.log(title);
-  });
 
   const returnHome = () => {
     navigate("/");
     dispatch(resetResultAction());
     dispatch(resetAllAction());
-    localStorage.removeItem("currentQuestionIndex");
+    sessionStorage.removeItem(`currentQuestionIndex_${title}`);
   };
 
   return (
     <div className="result">
-      <div>
+      <div className="title">
         <p>Quiz Completed!</p>
         <h1>You Scored...</h1>
       </div>
